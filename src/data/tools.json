@@ -1,0 +1,9 @@
+[
+  {
+    "id": "photoshop",
+    "name": "在线 PS",
+    "description": "免费网页版图片编辑器，无需登录。",
+    "path": "/tool/photoshop/",
+    "enabled": true
+  }
+]

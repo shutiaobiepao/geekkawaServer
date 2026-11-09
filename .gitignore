@@ -1,0 +1,14 @@
+.DS_Store
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+
+# 部署产物：由 CI 或本地 build 写入，不提交
+webStatic/leavetheChairHomepage/**
+webStatic/geekkawaWeb/**
+webStatic/.root-seo/**
+webStatic/_seoFragments/**
+!webStatic/**/.gitkeep
+!webStatic/geekkawaHome/**
