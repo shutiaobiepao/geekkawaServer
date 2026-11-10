@@ -2,7 +2,7 @@
 
 [GeekKawa](https://geekkawa.com) 生产托管服务：在单台 Node（Fastify）上挂载多路径静态站点、`/api/v1` 固定数据接口；生产环境由 **Nginx** 终结 HTTPS 并反代到本进程（默认 `127.0.0.1:3000`）。
 
-与 **geekkawaWeb**、**bodySaver** 分仓；本仓负责路由、站根 SEO 组装、部署脚本，**不**包含各产品前端源码。
+与 **geekkawaWeb**、**bodySaver** 分仓开发；构建产物通过 **`sync:web-static`** 写入 `webStatic/` 并 **提交本仓**，服务器 `git pull` 即可更新静态。
 
 ## 架构一览
 
@@ -46,7 +46,7 @@ geekkawaServer/
     ├── leavetheChairHomepage/  # LTC 页面（sync 写入）
     ├── geekkawaWeb/        # 工具站 dist（sync 写入）
     ├── _seoFragments/      # 各产品 sitemap 原料（见下文）
-    └── .root-seo/          # 对外站根 SEO（build:seo 写入）
+    └── .root-seo/          # 对外站根 SEO（build:seo 写入，随 Git 发布）
 ```
 
 ### `webStatic/_seoFragments` 是做什么的？

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="免费 Chrome 扩展：在你正在看的标签页按间隔提醒起身。可设工作时段与主题，设置只保存在本机。"
+    />
+    <title>LeaveTheChair · 起身提醒</title>
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="LeaveTheChair" />
+    <meta id="seo-keywords" name="keywords" content="" />
+    <link rel="canonical" id="seo-canonical" href="/leavethechair/homepage/" />
+    <link rel="alternate" hreflang="zh-CN" id="seo-hreflang-zh" href="/leavethechair/homepage/" />
+    <link rel="alternate" hreflang="en" id="seo-hreflang-en" href="/leavethechair/homepage/?lang=en" />
+    <link rel="alternate" hreflang="x-default" id="seo-hreflang-default" href="/leavethechair/homepage/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LeaveTheChair" />
+    <meta id="seo-og-title" property="og:title" content="" />
+    <meta id="seo-og-desc" property="og:description" content="" />
+    <meta id="seo-og-url" property="og:url" content="" />
+    <meta id="seo-og-image" property="og:image" content="" />
+    <meta id="seo-og-locale" property="og:locale" content="zh_CN" />
+    <meta id="seo-og-locale-alt" property="og:locale:alternate" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta id="seo-twitter-title" name="twitter:title" content="" />
+    <meta id="seo-twitter-desc" name="twitter:description" content="" />
+    <meta id="seo-twitter-image" name="twitter:image" content="" />
+    <link rel="icon" href="assets/icon128.png?v=19f9de327df2" />
+    <link rel="apple-touch-icon" href="assets/icon128.png?v=19f9de327df2" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" title="LLMs" href="/llms.txt" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=d5d0bb40dd3f" />
+    <script type="application/ld+json" id="seo-jsonld"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#top" data-i18n="nav.skip">跳到主内容</a>
+    <p class="visually-hidden" id="seo-static-summary">
+      LeaveTheChair（起身提醒）是一款免费的 Google Chrome 浏览器扩展，在你正在查看的标签页按自定义间隔温和提醒起身活动，支持工作时段、暂停、主题与中英文；设置保存在本机。English: LeaveTheChair is a free Chrome extension for stand-up break reminders on the active tab only, with local privacy-first settings.
+    </p>
+    <noscript>
+      <style>
+        .reveal,
+        .reveal-stagger > * {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top">
+          <img src="assets/icon128.png?v=19f9de327df2" alt="" width="36" height="36" />
+          LeaveTheChair
+        </a>
+
+        <nav class="header-nav" aria-label="Main">
+          <ul class="nav-links" id="nav-links">
+            <li><a href="#features" data-nav="features" data-i18n="nav.features">功能</a></li>
+            <li><a href="#demo" data-nav="demo" data-i18n="nav.demo">演示</a></li>
+            <li><a href="#faq" data-nav="faq" data-i18n="nav.faq">常见问题</a></li>
+            <li><a href="#" data-open-privacy data-i18n="nav.privacy">隐私</a></li>
+          </ul>
+        </nav>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          id="menu-toggle"
+          aria-expanded="false"
+          aria-controls="nav-links"
+          data-i18n-aria="nav.menuAria"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <div class="header-actions">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button class="lang-btn is-active" type="button" data-lang="zh" aria-pressed="true">中</button>
+            <button class="lang-btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="btn btn-primary btn-sm" href="#" data-i18n-store data-i18n="nav.download">立即下载</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero reveal" data-section="top">
+        <div class="hero-bg" aria-hidden="true">
+          <span class="hero-orb hero-orb-green"></span>
+          <span class="hero-orb hero-orb-blue"></span>
+        </div>
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="hero-badge" data-i18n="hero.badge">Chrome 扩展 · 免费</p>
+            <h1 data-i18n="hero.title">起身一下，思路更清晰</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+              Chrome 扩展，按你设定的间隔在当前标签页温和提醒起身活动。
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-hero" href="#" data-i18n-store data-i18n="hero.cta">添加到 Chrome · 免费使用</a>
+              <a class="btn btn-outline" href="#demo" data-i18n="hero.secondary">观看产品演示</a>
+            </div>
+            <div class="hero-social" id="hero-social" aria-live="polite"></div>
+            <p class="hero-note" data-i18n="hero.note">仅当前标签大屏提示 · 本地隐私 · 中/英切换</p>
+          </div>
+          <div class="hero-visual">
+            <img id="hero-image" src="assets/hero-zh.png?v=f20ab5e9d9fc" alt="起身提醒" width="800" height="450" />
+          </div>
+        </div>
+      </section>
+
+      <div class="hero-connector" aria-hidden="true"></div>
+
+      <section class="section features-section reveal" id="features" data-section="features">
+        <div class="container">
+          <div class="section-head section-head-left">
+            <p class="section-label" data-i18n="features.label">功能亮点</p>
+            <h2 data-i18n="features.heading">为久坐用户设计的提醒方式</h2>
+            <p data-i18n="features.subheading">不恐吓、不刷屏，只做一件事：帮你按时站起来动一动。</p>
+          </div>
+          <div class="feature-grid" id="feature-grid"></div>
+        </div>
+      </section>
+
+      <section class="section demo-section reveal" id="demo" data-section="demo">
+        <div class="container">
+          <div class="section-head section-head-left demo-intro">
+            <p class="section-label" data-i18n="demo.label">产品演示</p>
+            <h2 data-i18n="demo.heading">产品演示</h2>
+          </div>
+
+          <div
+            class="demo-carousel"
+            id="demo-carousel"
+            aria-roledescription="carousel"
+            data-i18n-aria="demo.carouselLabel"
+          >
+            <button type="button" class="demo-nav demo-prev" id="demo-prev" aria-label="Previous slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+
+            <div class="demo-panel" id="demo-panel">
+              <div class="demo-stage">
+                <div class="demo-media">
+                <div class="demo-media-stack demo-media-stack--video" id="demo-media-stack">
+                  <video
+                    id="demo-vid-a"
+                    class="demo-ui-shot is-active"
+                    muted
+                    playsinline
+                    preload="metadata"
+                  ></video>
+                  <video
+                    id="demo-vid-b"
+                    class="demo-ui-shot"
+                    muted
+                    playsinline
+                    preload="metadata"
+                  ></video>
+                </div>
+                <div class="demo-dual-stack is-hidden" id="demo-dual-stack" aria-hidden="true">
+                  <div class="demo-dual-card is-back" id="demo-dual-back">
+                    <video class="demo-dual-vid" id="demo-dual-vid-back" muted playsinline preload="metadata"></video>
+                  </div>
+                  <div class="demo-dual-card is-front" id="demo-dual-front">
+                    <video class="demo-dual-vid" id="demo-dual-vid-front" muted playsinline preload="metadata"></video>
+                  </div>
+                </div>
+                </div>
+                <div class="demo-copy" id="demo-copy">
+                  <div class="demo-copy-scrim">
+                    <p class="demo-step" id="demo-step">01</p>
+                    <h3 class="demo-slide-title" id="demo-title"></h3>
+                    <p class="demo-slide-desc" id="demo-desc"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" class="demo-nav demo-next" id="demo-next" aria-label="Next slide">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+
+          </div>
+
+          <div class="demo-carousel-meta">
+            <div
+              class="demo-dots"
+              id="demo-dots"
+              role="tablist"
+              data-i18n-aria="demo.dotsLabel"
+            ></div>
+          </div>
+
+          <p class="demo-tagline" data-i18n="demo.tagline">简约 · 无声 · 本地隐私</p>
+        </div>
+      </section>
+
+      <section class="section impact-section reveal" id="reviews" data-section="reviews">
+        <div class="container">
+          <p class="section-label section-label-center" data-i18n="reviews.label">用户反馈</p>
+          <div class="impact-grid">
+            <div class="impact-left">
+              <div class="impact-title-wrap">
+                <div class="impact-mascot" role="presentation">
+                  <img
+                    class="impact-mascot__poster"
+                    src="assets/standUp.png?v=f3941c7ce9ef"
+                    alt=""
+                    width="104"
+                    height="104"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <img
+                    class="impact-mascot__anim"
+                    alt=""
+                    width="104"
+                    height="104"
+                    loading="lazy"
+                    decoding="async"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h2 class="impact-title">
+                  <span data-i18n="stats.titleLine1">小小的打断</span>
+                  <span data-i18n="stats.titleLine2">带来持续的改变</span>
+                </h2>
+              </div>
+              <p class="stats-research-label" data-i18n="stats.researchLabel">
+                以下为公开健康研究中的趋势参考，非本扩展实测数据
+              </p>
+              <div class="stats-row" id="stats-grid"></div>
+              <p class="stats-note" data-i18n="stats.note">
+                * 百分比来自多项久坐与办公效率相关研究，个体差异较大
+              </p>
+            </div>
+            <div class="impact-right">
+              <div class="reviews-stack" id="reviews-grid"></div>
+              <div class="reviews-more">
+                <a href="#" id="reviews-more" data-i18n-reviews data-i18n="reviews.link">查看更多评价</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt reveal" id="faq" data-section="faq">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-i18n="faq.heading">常见问题</h2>
+          </div>
+          <div class="faq-list" id="faq-list"></div>
+        </div>
+      </section>
+
+      <section class="cta-band reveal" data-section="cta">
+        <div class="container cta-band-inner">
+          <div class="cta-band-copy">
+            <h2 data-i18n="cta.title">现在就试试，给未来的自己一个更健康的办公方式</h2>
+            <p class="cta-band-sub" data-i18n="cta.sub">免费安装 · 无需账号 · 设置保存在本机</p>
+          </div>
+          <div class="cta-band-actions">
+            <a class="btn btn-primary btn-hero" href="#" data-i18n-store data-i18n="cta.button">添加到 Chrome</a>
+            <a class="btn btn-outline btn-on-tint" href="#reviews" data-i18n="cta.secondary">看看大家怎么说</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img src="assets/icon128.png?v=19f9de327df2" alt="" width="40" height="40" />
+            <p data-i18n="footer.tagline">LeaveTheChair — 起身提醒，打断久坐，活动一下。</p>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="footer.more">更多</h4>
+            <ul>
+              <li><a href="#features" data-i18n="nav.features">功能</a></li>
+              <li><a href="#" data-open-privacy data-i18n="nav.privacy">隐私</a></li>
+              <li><a href="#faq" data-i18n="nav.faq">常见问题</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4 data-i18n="footer.support">支持</h4>
+            <ul>
+              <li>
+                <a href="#" data-i18n-reviews data-i18n="footer.feedback">评价与反馈</a>
+              </li>
+              <li>
+                <a href="#" data-i18n-store data-i18n="nav.download">立即下载</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <a
+            class="footer-icp"
+            id="footer-icp"
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n-aria="footer.icpAria"
+          >京ICP备2026066149号</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="privacy-modal" id="privacy-modal" hidden aria-hidden="true">
+      <div class="privacy-backdrop" data-close-privacy tabindex="-1"></div>
+      <div
+        class="privacy-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="privacy-title"
+      >
+        <div class="privacy-panel">
+          <header class="privacy-header">
+            <div>
+              <h2 id="privacy-title" data-i18n="privacy.title">隐私政策</h2>
+              <p class="privacy-updated">
+                <span data-i18n="privacy.updatedLabel">最近更新：</span>
+                <span data-i18n="privacy.updated">2025 年 7 月</span>
+              </p>
+            </div>
+            <button
+              type="button"
+              class="privacy-close"
+              data-close-privacy
+              aria-label="Close"
+              data-i18n-aria="privacy.closeAria"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </header>
+          <div class="privacy-body" id="privacy-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-cta-bar" id="mobile-cta-bar">
+      <a class="btn btn-primary btn-mobile-cta" href="#" data-i18n-store data-i18n="nav.download">立即下载</a>
+    </div>
+
+    <script>window.__LTC_ASSET_HASHES__={"assets/hero-en.png":"a1439b0569fc","assets/hero-zh.png":"f20ab5e9d9fc","assets/icon128.png":"19f9de327df2","assets/standUp.gif":"97ab05e3ff0f","assets/standUp.png":"f3941c7ce9ef","assets/function/1.webp":"bca5d5142fb1","assets/function/2.webp":"aa9c2f0a6c61","assets/function/3.webp":"26aa37e00f60","assets/function/4.webp":"44fa3507dde4","assets/function/5.webp":"88d081bc2c1c","assets/function/6.webp":"2aa141bd6083","assets/demo/01-reminder-CN.mov":"571118d32b72","assets/demo/01-reminder-EN.mov":"32819c4d79d2","assets/demo/02-schedule-CN.mov":"73e1b8dd42ac","assets/demo/02-schedule-EN.mov":"7678935232af","assets/demo/03-theme-a-CNEN.mov":"01f1acf5fec6","assets/demo/03-theme-b-CNEN.mov":"14e44eb037b2","assets/demo/04-find-CN.mov":"16bb6b82c58d","assets/demo/04-find-EN.mov":"d6267b91a84b"};</script>
+    <script src="i18n.js?v=d5d0bb40dd3f"></script>
+    <script src="main.js?v=d5d0bb40dd3f"></script>
+  </body>
+</html>

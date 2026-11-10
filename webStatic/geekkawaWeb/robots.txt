@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /photoshop
+
+Sitemap: https://geekkawa.com/sitemap.xml

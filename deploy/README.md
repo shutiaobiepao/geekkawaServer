@@ -11,7 +11,7 @@
 | 本仓 **`seo/`** + fragments | `webStatic/.root-seo/` | `/robots.txt`、`/sitemap.xml`、`/llms.txt`、子 sitemap |
 | **`webStatic/geekkawaHome/`**（Git） | 同左 | `/` |
 
-`webStatic/` 中除 **`geekkawaHome/`** 外**不提交 Git**；由 `sync-web-static` 或 CI 填充。
+`webStatic/` 构建产物**已提交 Git**。本地发版：`npm run sync:web-static:release` → `git add webStatic` → `push`；ECS：`git pull` + `pm2 restart geekkawa`（改 TS 时还需 `npm run build`）。
 
 ### SEO 数据流
 
