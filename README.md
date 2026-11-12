@@ -178,7 +178,7 @@ curl -I http://127.0.0.1:3000/tool/
 
 仅静态发版（只动了 `webStatic`）：ECS 上 **`git pull` + `pm2 restart geekkawa`** 即可，不必 `npm run build`。
 
-安全组、Nginx 模板、systemd / PM2 环境变量见 **[deploy/README.md](./deploy/README.md)**。
+安全组（含 **SSH 22 须与本机出口 IP 一致** 的说明）、Nginx 模板、systemd / PM2 见 **[deploy/README.md](./deploy/README.md)**。
 
 ## 相关仓库
 
