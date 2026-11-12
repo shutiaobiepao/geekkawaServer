@@ -48,6 +48,7 @@ const homeOnly = flags.has('--home-only')
 const webOnly = flags.has('--web-only')
 const syncHome = !webOnly
 const syncWeb = !homeOnly
+const withSeo = flags.has('--with-seo')
 const skipSeo = flags.has('--skip-seo')
 
 function fail(message, hints = []) {
@@ -189,20 +190,29 @@ function printHelp() {
   --build                 等同 --build-home --build-web
   --home-only             仅同步 LeaveTheChair 到 webStatic/leavetheChairHomepage
   --web-only              仅同步工具站到 webStatic/geekkawaWeb
-  --skip-seo              同步后不执行 build:seo
+  --with-seo              同步后执行 build:seo（sync:all / sync:all:assets 使用）
+  --skip-seo              与 --with-seo 同用时跳过 build:seo
   -h, --help              显示帮助
 
-默认: 不 build，仅镜像复制（目录须已存在）。
+默认: 不 build，仅镜像复制（目录须已存在）；默认不 build:seo。
+
+hash:home-assets 仅影响 build/homePage/assets 下图/视频等；build:home 已为 CSS/JS 写入缓存戳。
 
 环境变量:
   SYNC_BODYSAVER_ROOT     默认 ${defaults.SYNC_BODYSAVER_ROOT}
   SYNC_GEEKKAWA_WEB_ROOT  默认 ${defaults.SYNC_GEEKKAWA_WEB_ROOT}
   WEB_STATIC_DIR          默认 ${defaults.WEB_STATIC_DIR}
 
+npm 快捷命令（见 package.json）:
+  sync:leavethechair        build:home + 同步 LTC（不含 assets 图/视频 hash）
+  sync:leavethechair:assets 上项 + hash:home-assets
+  sync:tool                 build + 同步工具站
+  sync:all                  双 build + 同步 + build:seo
+  sync:all:assets           sync:all + hash:home-assets
+
 示例:
-  npm run sync:web-static -- --build-home
-  npm run sync:web-static -- --build-home --hash-home-assets
-  npm run sync:web-static:release
+  npm run sync:web-static -- --build-home --home-only
+  npm run sync:web-static -- --build-home --hash-home-assets --home-only
 `)
 }
 
@@ -252,7 +262,7 @@ async function main() {
     await syncGeekkawaWeb()
   }
 
-  if (!skipSeo && (syncHome || syncWeb)) {
+  if (withSeo && !skipSeo) {
     runBuildSeo()
   }
 

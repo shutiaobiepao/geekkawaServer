@@ -10,7 +10,11 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "sync:web-static": "node scripts/sync-web-static.mjs",
     "build:seo": "node scripts/build-seo.mjs",
-    "sync:web-static:release": "node scripts/sync-web-static.mjs --build-home --hash-home-assets --build-web"
+    "sync:leavethechair": "node scripts/sync-web-static.mjs --build-home --home-only",
+    "sync:leavethechair:assets": "node scripts/sync-web-static.mjs --build-home --hash-home-assets --home-only",
+    "sync:tool": "node scripts/sync-web-static.mjs --build-web --web-only",
+    "sync:all": "node scripts/sync-web-static.mjs --build-home --build-web --with-seo",
+    "sync:all:assets": "node scripts/sync-web-static.mjs --build-home --hash-home-assets --build-web --with-seo"
   },
   "engines": {
     "node": ">=20"

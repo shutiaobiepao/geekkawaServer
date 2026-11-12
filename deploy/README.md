@@ -11,7 +11,7 @@
 | 本仓 **`seo/`** + fragments | `webStatic/.root-seo/` | `/robots.txt`、`/sitemap.xml`、`/llms.txt`、子 sitemap |
 | **`webStatic/geekkawaHome/`**（Git） | 同左 | `/` |
 
-`webStatic/` 构建产物**已提交 Git**。本地发版：`npm run sync:web-static:release` → `git add webStatic` → `push`；ECS：`git pull` + `pm2 restart geekkawa`（改 TS 时还需 `npm run build`）。
+`webStatic/` 构建产物**已提交 Git**。本地发版：`npm run sync:all`（或 `sync:leavethechair` / `sync:tool`）→ `git add webStatic` → `push`；ECS：`git pull` + `pm2 restart geekkawa`（改 TS 时还需 `npm run build`）。
 
 ### SEO 数据流
 
@@ -46,11 +46,12 @@ cd geekkawaServer
 
 npm run sync:web-static -- --help
 
-# 常见
-npm run sync:web-static -- --build-home
-npm run sync:web-static -- --build-home --hash-home-assets
-npm run sync:web-static -- --build-web
-npm run sync:web-static:release
+# 发版快捷命令
+npm run sync:leavethechair          # LTC；build:home 已含 CSS/JS 缓存戳，不 hash 图/视频
+npm run sync:leavethechair:assets   # LTC + hash:home-assets
+npm run sync:tool
+npm run sync:all                    # 整站 + build:seo
+npm run sync:all:assets
 
 # 仅重组 SEO（已 sync 过 fragments）
 npm run build:seo
@@ -58,12 +59,13 @@ npm run build:seo
 
 | 标志 | 含义 |
 |------|------|
-| （默认） | 拷贝 home + web（若未 `--home-only`/`--web-only`），结束后 **`build:seo`** |
+| （默认） | 仅镜像复制；**不** `build:seo` |
 | `--build-home` | bodySaver：`npm run build:home` |
-| `--hash-home-assets` | bodySaver：`npm run hash:home-assets`（须先 `build:home`） |
+| `--hash-home-assets` | bodySaver：`hash:home-assets`（图/视频等；须先 `build:home`） |
 | `--build-web` | geekkawaWeb：`npm run build` |
 | `--home-only` / `--web-only` | 只同步一侧 |
-| `--skip-seo` | 不执行 `build:seo` |
+| `--with-seo` | 结束后 `build:seo`（`sync:all` 使用） |
+| `--skip-seo` | 与 `--with-seo` 同用时跳过 `build:seo` |
 
 **环境变量**：`SYNC_BODYSAVER_ROOT`、`SYNC_GEEKKAWA_WEB_ROOT`、`WEB_STATIC_DIR`、`SITE_ORIGIN`。
 
@@ -85,21 +87,33 @@ npm run build:seo
 
 配置模板：[nginx/geekkawa.com.conf](./nginx/geekkawa.com.conf)（证书路径按云厂商实际修改）。
 
-### 3. 发版顺序（与本地 release 等价）
+### 3. 发版（推荐：本机 sync + push，ECS 只 pull）
+
+**本机**（见仓库根 [README.md](../README.md)「发版流程」）：`npm run sync:all`（或单品命令）→ `git push`。
+
+**ECS**（静态已进 Git，一般**不需要**在服务器跑 sync）：
 
 ```bash
-# 在构建机或 ECS 上（路径按实际）
-export SYNC_BODYSAVER_ROOT=/var/src/bodySaver
-export SYNC_GEEKKAWA_WEB_ROOT=/var/src/geekkawaWeb
+cd /var/www/geekkawaServer/geekkawaServer   # 按实际克隆路径
 
-cd /var/www/geekkawaServer
 git pull
-npm ci
-npm run sync:web-static:release   # 或 CI 已准备好 webStatic 则跳过
-npm run build
-sudo systemctl restart geekkawa   # 自建 unit，见下
+# 若本次含 TypeScript / 依赖变更：
+npm ci && npm run build
+
+pm2 restart geekkawa
+# 或：sudo systemctl restart geekkawa
+
+# Nginx 配置有改时：
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+| 本次变更 | ECS 最少操作 |
+|----------|----------------|
+| 仅 `webStatic/` | `git pull` + `pm2 restart geekkawa` |
+| `src/` 或依赖 | 上表 + `npm run build` |
+| `deploy/nginx/*` | `git pull` + `nginx -t` + reload |
+
+**备选**（服务器上仍有 bodySaver / geekkawaWeb 源码时）：可在 ECS 设 `SYNC_BODYSAVER_ROOT`、`SYNC_GEEKKAWA_WEB_ROOT` 后跑 `npm run sync:all`，再 `build` + 重启；与「产物进 Git」二选一即可。
 
 ### 4. systemd 示例
 

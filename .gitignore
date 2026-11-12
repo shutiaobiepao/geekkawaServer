@@ -6,4 +6,4 @@ dist/
 
 !.env.example
 
-# webStatic 构建产物已纳入 Git，发版前在本地执行 sync:web-static:release 再 commit
+# webStatic 构建产物已纳入 Git，发版前在本地执行 sync:all 等再 commit

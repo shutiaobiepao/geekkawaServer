@@ -41,12 +41,12 @@ geekkawaServer/
 │   ├── sync-web-static.mjs # 从兄弟仓构建物写入 webStatic
 │   └── build-seo.mjs       # 组装 _seoFragments + seo/ → .root-seo
 ├── deploy/nginx/           # Nginx 配置模板
-└── webStatic/              # 运行时静态（大部分 gitignore，见下）
-    ├── geekkawaHome/       # 品牌首页（提交 Git）
-    ├── leavetheChairHomepage/  # LTC 页面（sync 写入）
-    ├── geekkawaWeb/        # 工具站 dist（sync 写入）
+└── webStatic/              # 运行时静态（**提交 Git**，ECS pull 更新）
+    ├── geekkawaHome/       # 品牌首页
+    ├── leavetheChairHomepage/  # LTC 页面（本地 sync 写入后 commit）
+    ├── geekkawaWeb/        # 工具站 dist（同上）
     ├── _seoFragments/      # 各产品 sitemap 原料（见下文）
-    └── .root-seo/          # 对外站根 SEO（build:seo 写入，随 Git 发布）
+    └── .root-seo/          # 对外站根 SEO（build:seo 写入）
 ```
 
 ### `webStatic/_seoFragments` 是做什么的？
@@ -66,10 +66,10 @@ geekkawaServer/
 ```bash
 npm install
 
-# 写入静态（可选：先 build 再拷贝）
-npm run sync:web-static -- --build-home          # 仅 LTC
-npm run sync:web-static -- --build-web           # 仅工具站
-npm run sync:web-static:release                 # LTC build + hash + 工具 build + sync + seo
+# 写入静态（按产品，见下表）
+npm run sync:leavethechair      # LTC：build:home + 同步（CSS/JS 已有缓存戳；不 hash 图/视频）
+npm run sync:tool               # 工具站 build + 同步
+npm run sync:all                # 整站 + build:seo
 
 npm run dev
 ```
@@ -85,16 +85,20 @@ npm run dev
 | `npm run dev` | 开发：`tsx watch` |
 | `npm run build` | 编译 TypeScript → `dist/` |
 | `npm start` | 生产：`node dist/server.js` |
-| `npm run sync:web-static` | 从兄弟仓拷产物；默认结束后跑 `build:seo` |
-| `npm run sync:web-static -- --help` | 分项：`--build-home`、`--hash-home-assets`、`--build-web`、`--home-only`、`--web-only`、`--skip-seo` |
-| `npm run sync:web-static:release` | 发版一条龙（含 LTC `hash:home-assets`） |
-| `npm run build:seo` | 仅重组 `webStatic/.root-seo/` |
+| `npm run sync:leavethechair` | bodySaver `build:home` → 同步 LTC（**不** hash 图/视频等非 CSS/JS 资源） |
+| `npm run sync:leavethechair:assets` | 上项 + `hash:home-assets`（改了 `homePage/assets/` 时用） |
+| `npm run sync:tool` | geekkawaWeb `build` → 同步工具站 |
+| `npm run sync:all` | 双 build + 双同步 + `build:seo`（推 Git 前整站默认） |
+| `npm run sync:all:assets` | `sync:all` + LTC `hash:home-assets` |
+| `npm run sync:web-static` | 底层脚本：仅拷贝或自组合 flags（`--help`） |
+| `npm run build:seo` | 仅重组 `webStatic/.root-seo/`（改 `seo/` 或需刷新站根 sitemap 时） |
 
-### bodySaver 与 hash 的关系
+### bodySaver 与「hash」
 
-- **`--build-home`** 只跑 `build:home`（**不**含 `hash:home-assets`）。
-- 需要 assets 内容 hash 时单独加 **`--hash-home-assets`**，或直接用 **`sync:web-static:release`**。
-- 顺序须为：`build:home` → `hash:home-assets` → sync。
+- **`build:home`**（含于 `sync:leavethechair`）：为 **CSS、JS** 等在 `index.html` 写入 `?v=` 缓存戳。
+- **`hash:home-assets`**（`sync:leavethechair:assets` / `sync:all:assets`）：仅为 **`assets/` 下图、视频** 等注入内容 hash；与上项无关。
+- 顺序须为：`build:home` →（可选）`hash:home-assets` → sync。
+- **`build:seo`** 仅在 **`sync:all` / `sync:all:assets`**（或手动 `build:seo`、带 `--with-seo`）时跑，单品 sync 不碰站根 SEO。
 
 ## 环境变量
 
@@ -113,16 +117,68 @@ npm run dev
 
 | 场景 | 做法 |
 |------|------|
-| 整站接近生产 | `sync:web-static:release` + `npm run dev`，访问 `:3000` |
+| 整站接近生产 | `sync:all` + `npm run dev`，访问 `:3000` |
 | 只改在线 PS | 终端 1：`geekkawaServer` `npm run dev`；终端 2：`geekkawaWeb` `npm run dev`（Vite 已 proxy `/api`） |
-| 只改 LTC 落地页 | bodySaver `build:home` 后 `sync --build-home` 或 `--home-only` |
+| 只改 LTC 落地页 | `sync:leavethechair` 或改图后 `sync:leavethechair:assets` |
 | 只改品牌 `/` | 编辑 `webStatic/geekkawaHome/index.html`（可提交 Git） |
 
-## 生产部署
+## 发版流程
 
-ECS 上 **Nginx 占 80/443**，Fastify 只监听本机 3000；CI /rsync 写入 `webStatic` 后重启 Node。
+静态产物在本机组装并进 Git；**ECS 不 clone bodySaver / geekkawaWeb**，只拉本仓。
 
-详细步骤、安全组、systemd 示意见 **[deploy/README.md](./deploy/README.md)**。
+### 本机（有兄弟仓 `../bodySaver`、`../geekkawaWeb`）
+
+```bash
+cd geekkawaServer
+
+# 整站或单品（见下表）
+npm run sync:all
+
+# 仅改 Fastify 源码
+npm run build
+
+git add webStatic src dist   # 按实际改动选择
+git commit -m "…"
+git push origin main
+```
+
+| 改了什么 | 本机最少要做 |
+|----------|----------------|
+| bodySaver 落地页（文案/CSS/JS） | `sync:leavethechair` |
+| bodySaver 落地页（图/视频 assets） | `sync:leavethechair:assets` |
+| geekkawaWeb | `sync:tool` |
+| LTC + 工具 + 站根 sitemap | `sync:all` 或（动 assets）`sync:all:assets` |
+| 仅 `seo/` 或 fragments | `npm run build:seo` |
+| 仅 `src/`（API / 路由） | `npm run build`（`webStatic` 可不动） |
+| 仅 `geekkawaHome` | 直接改 `webStatic/geekkawaHome/` 并 commit |
+
+### ECS 更新
+
+仓库目录以你机器为准（常见：`/var/www/geekkawaServer/geekkawaServer`）。Nginx 反代 **127.0.0.1:3000**，Node **不对公网开 3000**。
+
+```bash
+cd /var/www/geekkawaServer/geekkawaServer   # 换成实际路径
+
+git pull
+
+# 仅当本次 push 含 src/ 变更时需要
+npm ci          # package-lock 变了时
+npm run build
+
+pm2 restart geekkawa    # 或 systemctl restart geekkawa
+```
+
+**自检：**
+
+```bash
+test -f webStatic/leavetheChairHomepage/index.html && echo OK
+curl -I http://127.0.0.1:3000/leavethechair/homepage/
+curl -I http://127.0.0.1:3000/tool/
+```
+
+仅静态发版（只动了 `webStatic`）：ECS 上 **`git pull` + `pm2 restart geekkawa`** 即可，不必 `npm run build`。
+
+安全组、Nginx 模板、systemd / PM2 环境变量见 **[deploy/README.md](./deploy/README.md)**。
 
 ## 相关仓库
 
