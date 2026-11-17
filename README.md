@@ -2,7 +2,7 @@
 
 [GeekKawa](https://geekkawa.com) 生产托管服务：在单台 Node（Fastify）上挂载多路径静态站点、`/api/v1` 固定数据接口；生产环境由 **Nginx** 终结 HTTPS 并反代到本进程（默认 `127.0.0.1:3000`）。
 
-与 **geekkawaWeb**、**bodySaver** 分仓开发；构建产物通过 **`sync:web-static`** 写入 `webStatic/` 并 **提交本仓**，服务器 `git pull` 即可更新静态。
+与 **geekkawaWeb**、**bodySaver** 分仓开发；构建产物通过 `sync:web-static` 写入 `webStatic/` 并 **提交本仓**，服务器 `git pull` 即可更新静态。
 
 ## 架构一览
 
@@ -53,9 +53,9 @@ geekkawaServer/
 
 各产品**独立构建**时会产生自己的 URL 列表（例如 bodySaver 的 `sitemap.xml`）。不能直接都放在站根，否则会互相覆盖。
 
-- **`_seoFragments/<产品>/sitemap.xml`**：只存本产品 urlset，**不对外直链**。
-- **`npm run build:seo`** 把它们复制为 `/sitemap-leavethechair.xml`、`/sitemap-tool.xml` 等，并生成根 **`/sitemap.xml` 索引**。
-- 站级 **`robots.txt` / `llms.txt`** 以仓库内 **`seo/`** 为主稿。
+- `_seoFragments/<产品>/sitemap.xml`：只存本产品 urlset，**不对外直链**。
+- `npm run build:seo` 把它们复制为 `/sitemap-leavethechair.xml`、`/sitemap-tool.xml` 等，并生成根 `/sitemap.xml` **索引**。
+- 站级 `robots.txt` **/** `llms.txt` 以仓库内 `seo/` 为主稿。
 
 新增产品线时：sync 时写入 `_seoFragments/新产品/`，或在 `seo/` 增加 `sitemap-新产品.xml`，再跑 `build:seo`。
 
@@ -95,10 +95,10 @@ npm run dev
 
 ### bodySaver 与「hash」
 
-- **`build:home`**（含于 `sync:leavethechair`）：为 **CSS、JS** 等在 `index.html` 写入 `?v=` 缓存戳。
-- **`hash:home-assets`**（`sync:leavethechair:assets` / `sync:all:assets`）：仅为 **`assets/` 下图、视频** 等注入内容 hash；与上项无关。
+- `build:home`（含于 `sync:leavethechair`）：为 **CSS、JS** 等在 `index.html` 写入 `?v=` 缓存戳。
+- `hash:home-assets`（`sync:leavethechair:assets` / `sync:all:assets`）：仅为 `assets/` **下图、视频** 等注入内容 hash；与上项无关。
 - 顺序须为：`build:home` →（可选）`hash:home-assets` → sync。
-- **`build:seo`** 仅在 **`sync:all` / `sync:all:assets`**（或手动 `build:seo`、带 `--with-seo`）时跑，单品 sync 不碰站根 SEO。
+- `build:seo` 仅在 `sync:all` **/** `sync:all:assets`（或手动 `build:seo`、带 `--with-seo`）时跑，单品 sync 不碰站根 SEO。
 
 ## 环境变量
 
@@ -157,16 +157,18 @@ git push origin main
 仓库目录以你机器为准（常见：`/var/www/geekkawaServer/geekkawaServer`）。Nginx 反代 **127.0.0.1:3000**，Node **不对公网开 3000**。
 
 ```bash
-cd /var/www/geekkawaServer/geekkawaServer   # 换成实际路径
-
+cd /var/www/geekkawaServer  # 换成实际路径
+#更新下node
 git pull
-
+# package-lock 变了时
+npm ci   
 # 仅当本次 push 含 src/ 变更时需要
-npm ci          # package-lock 变了时
 npm run build
-
-pm2 restart geekkawa    # 或 systemctl restart geekkawa
+#重启服务，可以通过pm2 l 看当前服务叫啥    
+pm2 restart {server_name}
 ```
+
+
 
 **自检：**
 
@@ -176,7 +178,7 @@ curl -I http://127.0.0.1:3000/leavethechair/homepage/
 curl -I http://127.0.0.1:3000/tool/
 ```
 
-仅静态发版（只动了 `webStatic`）：ECS 上 **`git pull` + `pm2 restart geekkawa`** 即可，不必 `npm run build`。
+仅静态发版（只动了 `webStatic`）：ECS 上 `git pull` **+** `pm2 restart geekkawa` 即可，不必 `npm run build`。
 
 安全组（含 **SSH 22 须与本机出口 IP 一致** 的说明）、Nginx 模板、systemd / PM2 见 **[deploy/README.md](./deploy/README.md)**。
 
