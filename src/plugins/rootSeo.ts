@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import fastifyStatic from '@fastify/static'
 import type { FastifyPluginAsync } from 'fastify'
 
 import { config, webStaticPath } from '../config.js'
@@ -13,6 +14,12 @@ const ROOT_SEO_FILES = ['robots.txt', 'llms.txt', 'sitemap.xml'] as const
  */
 export const rootSeoPlugin: FastifyPluginAsync = async (fastify) => {
   const rootSeo = webStaticPath(config.rootSeoDir)
+
+  await fastify.register(fastifyStatic, {
+    root: rootSeo,
+    serve: false,
+    decorateReply: true,
+  })
 
   for (const name of ROOT_SEO_FILES) {
     fastify.get(`/${name}`, async (_request, reply) => {
